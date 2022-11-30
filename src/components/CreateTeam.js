@@ -88,7 +88,7 @@ class CreateTeam extends Component {
         if (pokemon.length == 0) {
             return
         }
-        
+
         const res = await axios.get("https://pokeapi.co/api/v2/pokemon/" + pokemon.toLowerCase());
         let poke = {
             name: res.data.name
@@ -108,7 +108,7 @@ class CreateTeam extends Component {
             team: this.state.team
         }
 
-        if(newTeam.name.length==0 || newTeam.team.length!=6){
+        if (newTeam.name.length == 0 || newTeam.team.length != 6) {
             alert("You must fill all inputs")
             return
         }
@@ -119,16 +119,16 @@ class CreateTeam extends Component {
         else {
             await axios.post("https://proyecto-sd-api.onrender.com/api/teams", newTeam);
         }
-        window.location.href = '/team';
+        window.location.href = '/';
     }
 
     edit = (e) => {
         window.location.href = '/team/' + e.target.value;
     }
 
-    async getTeams(){
+    async getTeams() {
         const res = await axios.get('https://proyecto-sd-api.onrender.com/api/teams')
-        this.setState({teams: res.data})
+        this.setState({ teams: res.data })
     }
 
     deleteTeam = async (id) => {
@@ -140,7 +140,7 @@ class CreateTeam extends Component {
         return (
             <div >
                 <div className='alert alert-warning' hidden={!this.state.editing}>
-                    <h5 style={{fontFamily:"Ketchum"}}>You are editing team {this.state.name}</h5> 
+                    <h5 style={{ fontFamily: "Ketchum" }}>You are editing team {this.state.name}</h5>
                     <Link className="btn btn-secondary" to={"/team"}>
                         New Team
                     </Link>
@@ -248,7 +248,9 @@ class CreateTeam extends Component {
                                                     <span>{poke}, </span>
                                                 ))}</td>
                                                 <td>
-                                                    <button className="btn btn-warning" value={team._id} onClick={this.edit}>Edit</button>
+                                                    <Link className="btn btn-secondary" to={"/team/" + team._id}>
+                                                        Edit
+                                                    </Link>
                                                     <button className="btn btn-danger" onClick={() => this.deleteTeam(team._id)}>Delete</button>
                                                 </td>
                                             </tr>
