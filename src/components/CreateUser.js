@@ -9,14 +9,14 @@ export default class CreateUser extends Component {
     }
 
     async componentDidMount(){
-        const res = await axios.get('http://localhost:4000/api/users');
+        const res = await axios.get('https://proyecto-sd-api.onrender.com/api/users');
         this.setState({users: res.data});
         this.getUsers();
         console.log(this.state.users);
     }
 
     getUsers = async () => {
-        const res = await axios.get('http://localhost:4000/api/users');
+        const res = await axios.get('https://proyecto-sd-api.onrender.com/api/users');
         this.setState({users: res.data});
     }
 
@@ -34,7 +34,7 @@ export default class CreateUser extends Component {
             }
         }
 
-        await axios.post('http://localhost:4000/api/users', {
+        await axios.post('https://proyecto-sd-api.onrender.com/api/users', {
             username: trainer
         })
         this.setState({username: ''});
@@ -44,7 +44,7 @@ export default class CreateUser extends Component {
     }
 
     deleteUser = async (id) => {
-        await axios.delete('http://localhost:4000/api/users/' + id);
+        await axios.delete('https://proyecto-sd-api.onrender.com/api/users/' + id);
         this.getUsers();
     }
 

@@ -20,13 +20,13 @@ class CreateTeam extends Component {
 
 
     async componentDidMount() {
-        const res = await axios.get('http://localhost:4000/api/users')
+        const res = await axios.get('https://proyecto-sd-api.onrender.com/api/users')
         this.setState({
             users: res.data,
             userSelected: res.data[0].username
         })
 
-        const res2 = await axios.get('http://localhost:4000/api/teams')
+        const res2 = await axios.get('https://proyecto-sd-api.onrender.com/api/teams')
         this.setState({
             teams: res2.data
         })
@@ -34,7 +34,7 @@ class CreateTeam extends Component {
 
         if (this.props.match.params.id) {
             console.log("entre al edit")
-            const res = await axios.get('http://localhost:4000/api/teams/' + this.props.match.params.id);
+            const res = await axios.get('https://proyecto-sd-api.onrender.com/api/teams/' + this.props.match.params.id);
             this.setState({
                 name: res.data.name,
                 team: res.data.team,
@@ -114,10 +114,10 @@ class CreateTeam extends Component {
         }
 
         if (this.state.editing) {
-            await axios.put("http://localhost:4000/api/teams/" + this.state._id, newTeam);
+            await axios.put("https://proyecto-sd-api.onrender.com/api/teams/" + this.state._id, newTeam);
         }
         else {
-            await axios.post("http://localhost:4000/api/teams", newTeam);
+            await axios.post("https://proyecto-sd-api.onrender.com/api/teams", newTeam);
         }
         window.location.href = '/team';
     }
@@ -127,12 +127,12 @@ class CreateTeam extends Component {
     }
 
     async getTeams(){
-        const res = await axios.get('http://localhost:4000/api/teams')
+        const res = await axios.get('https://proyecto-sd-api.onrender.com/api/teams')
         this.setState({teams: res.data})
     }
 
     deleteTeam = async (id) => {
-        await axios.delete('http://localhost:4000/api/teams/' + id);
+        await axios.delete('https://proyecto-sd-api.onrender.com/api/teams/' + id);
         this.getTeams();
     }
 
