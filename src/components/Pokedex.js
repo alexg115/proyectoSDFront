@@ -7,7 +7,8 @@ export default class Pokedex extends Component {
     state = {
         pokemon: [],
         next : '',
-        previous : ''
+        previous : '',
+        pokeSearch: ''
     }
 
     async componentDidMount(){
@@ -47,7 +48,8 @@ export default class Pokedex extends Component {
 
     search = (e) => {
         let pokemon = document.getElementById("pokemon-name").value.toLowerCase();
-        window.location.href = "/pokedex/"+pokemon;
+        this.setState({pokeSearch:e.target.value.toLowerCase()})
+        console.log(this.state)
     }
 
     render() {
@@ -55,10 +57,13 @@ export default class Pokedex extends Component {
             <div>
                 <div class="row" style={{margin:10}}>
                     <div class="col-3">
-                        <input type="search" id="pokemon-name" class="form-control" placeholder="Name or number"/>
+                        <input type="search" id="pokemon-name" class="form-control" placeholder="Name or number" onChange={this.search}/>
                     </div>
                     <div class="col">
-                    <button type="button" class="btn btn-warning" onClick={this.search}>Search</button>
+                    <Link className="btn btn-warning" to={"/pokedex/" + this.state.pokeSearch}>
+                        Search
+                    </Link>
+                    
                     </div>
                 </div>
                 <div class="card" id="lista">
