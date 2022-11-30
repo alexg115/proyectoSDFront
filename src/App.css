@@ -1,0 +1,84 @@
+.App {
+  text-align: center;
+  
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@font-face {
+  font-family: 'Ketchum';
+  src: local('Ketchum'),url('./fonts/Ketchum.otf') format('opentype');
+}
+
+body{
+  background-image:url(https://i.pinimg.com/736x/31/52/b1/3152b151b84a7016d0d150b5780944eb.jpg);
+  margin: auto;
+}
+
+.menu{
+  font-family: Ketchum;
+  font-size: x-large;
+  border-color: red !important;
+}
+
+#lista{
+  font-family: Ketchum;
+  font-size: x-large;
+  border-radius: 4%;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+#tituloLogin{
+  color: red;
+}
+
+#login{
+  font-family: Ketchum;
+  font-size: x-large;
+  border-radius: 4%;
+  color: red;
+  background-color: rgba(255, 204, 0, 0.99);
+}
+
+.inputPokemon{
+  font-family: Ketchum;
+  font-size: 30px;
+  background-color: rgb(255, 255, 153) !important;
+}
+
+.bg-custom-1 {
+  background-color: rgba(255, 255, 230, 0.2);
+}
