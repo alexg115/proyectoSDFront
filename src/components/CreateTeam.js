@@ -15,7 +15,9 @@ class CreateTeam extends Component {
         teams: [],
         pokemon: [],
         next: '',
-        previous: ''
+        previous: '',
+        pokesLoading: true,
+        teamsLoading: true
     }
 
 
@@ -28,7 +30,8 @@ class CreateTeam extends Component {
 
         const res2 = await axios.get('https://proyecto-sd-api.onrender.com/api/teams')
         this.setState({
-            teams: res2.data
+            teams: res2.data,
+            teamsLoading: false
         })
 
 
@@ -49,7 +52,7 @@ class CreateTeam extends Component {
         this.setState({ pokemon: res3.data.results })
         this.setState({ next: res3.data.next })
         this.setState({ previous: res3.data.previous })
-
+        this.setState({ pokesLoading: false })
     }
 
     next = async (e) => {
@@ -202,6 +205,11 @@ class CreateTeam extends Component {
                                             </div>
                                         ))
                                     }
+                                    <p className='d-flex justify-content-center'>
+                                        <div class="spinner-border text-warning " role="status" hidden={this.state.pokesLoading ? false : true}>
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </p>
                                 </div>
                                 <div className="d-flex justify-content-end" >
                                     <nav aria-label="...">
@@ -256,10 +264,14 @@ class CreateTeam extends Component {
                                             </tr>
                                         ))
                                     }
-
                                 </tbody>
                             </table>
 
+                            <p className='d-flex justify-content-center'>
+                                <div class="spinner-border text-danger " role="status" hidden={this.state.teamsLoading ? false : true}>
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </p>
                         </div>
                     </div>
                 </div>
