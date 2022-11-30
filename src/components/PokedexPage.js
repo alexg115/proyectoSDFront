@@ -14,15 +14,27 @@ export default class PokedexPage extends Component {
         descripcion: "",
         evos: [],
         stats: [],
-        statsPor: []
+        statsPor: [],
+        error: false,
+        pageLoading: true
     }
 
     async componentDidMount() {
 
         if (this.props.match.params.page) {
-            const res = await axios.get('https://pokeapi.co/api/v2/pokemon/' + this.props.match.params.page);
-            const res2 = await axios.get('https://pokeapi.co/api/v2/pokemon-species/' + this.props.match.params.page);
-            const res3 = await axios.get(res2.data.evolution_chain.url);
+            let res
+            let res2
+            let res3
+            try {
+                res = await axios.get('https://pokeapi.co/api/v2/pokemon/' + this.props.match.params.page);
+                res2 = await axios.get('https://pokeapi.co/api/v2/pokemon-species/' + this.props.match.params.page);
+                res3 = await axios.get(res2.data.evolution_chain.url);
+            } catch (e) {
+                console.log(e)
+                this.setState({ error: true, pageLoading: false })
+                return
+            }
+
             let types = ""
 
             res.data.types.forEach((element, index) => {
@@ -78,11 +90,11 @@ export default class PokedexPage extends Component {
                 descripcion: descripcion,
                 evos: lisImgs,
                 stats: stats,
-                statsPor: stats_por
+                statsPor: stats_por,
+                pageLoading: false
             })
             console.log(this.state)
         }
-
     }
 
     evolutions(data, lista) {
@@ -112,66 +124,75 @@ export default class PokedexPage extends Component {
             <div>
                 <div class="card" >
                     <div class="card-body bg-custom-1" style={{ backgroudColor: "red" }}>
-
-                        <div class="container">
-                            <div class="row align-items-start">
-                                <div class="col shadow-lg p-3 mb-5 bg-body rounded">
-                                    <h4 style={{ fontFamily: "Ketchum", fontSize: "40px" }}>#{this.state.data.id}</h4>
-                                    <h2 className="d-flex justify-content-center" style={{ fontFamily: "Ketchum", fontSize: "80px" }}>{this.state.name}</h2>
-                                    <img src={this.state.sprite_default} alt="not available" height={500} width={500} />
-                                    <h3 className="d-flex justify-content-center" style={{ fontFamily: "Ketchum", fontSize: "80px" }}>{this.state.types}</h3>
-                                </div>
-                                <div class="col" style={{ margin: "15px" }}>
-                                    <p style={{ fontSize: "30px" }}>{this.state.descripcion}</p>
-                                    <br />
-                                    <br />
-                                    <h5 className='d-flex justify-content-center' style={{ fontFamily: "Ketchum", fontSize: "40px" }}>Evolution</h5>
-                                    <div className="d-flex justify-content-center">
-                                        {
-                                            this.state.evos.map((img, index) => (
-                                                <span>
-                                                    <img src={img} />
-                                                    <img src="https://static.vecteezy.com/system/resources/thumbnails/008/844/878/small/arrow-icon-design-free-png.png" height={20} hidden={(this.state.evos.length - 1) == index ? true : false} />
-                                                </span>
-
-                                            ))
-                                        }
-
+                        <div hidden={this.state.pageLoading ? true : false}>
+                            <div class="container" hidden={this.state.error ? true : false}>
+                                <div class="row align-items-start">
+                                    <div class="col shadow-lg p-3 mb-5 bg-body rounded">
+                                        <h4 style={{ fontFamily: "Ketchum", fontSize: "40px" }}>#{this.state.data.id}</h4>
+                                        <h2 className="d-flex justify-content-center" style={{ fontFamily: "Ketchum", fontSize: "80px" }}>{this.state.name}</h2>
+                                        <img src={this.state.sprite_default} alt="not available" height={500} width={500} />
+                                        <h3 className="d-flex justify-content-center" style={{ fontFamily: "Ketchum", fontSize: "80px" }}>{this.state.types}</h3>
                                     </div>
-                                    <div>
-                                        <h5 style={{ fontFamily: "Ketchum", fontSize: "40px" }}>Stats</h5>
+                                    <div class="col" style={{ margin: "15px" }}>
+                                        <p style={{ fontSize: "30px" }}>{this.state.descripcion}</p>
                                         <br />
+                                        <br />
+                                        <h5 className='d-flex justify-content-center' style={{ fontFamily: "Ketchum", fontSize: "40px" }}>Evolution</h5>
+                                        <div className="d-flex justify-content-center">
+                                            {
+                                                this.state.evos.map((img, index) => (
+                                                    <span>
+                                                        <img src={img} />
+                                                        <img src="https://static.vecteezy.com/system/resources/thumbnails/008/844/878/small/arrow-icon-design-free-png.png" height={20} hidden={(this.state.evos.length - 1) == index ? true : false} />
+                                                    </span>
 
-                                        <p style={{ fontSize: "20px" }}>HP</p>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style={{width:this.state.statsPor[0]+"%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[0]}</div>
-                                        </div> 
-                                        <p style={{ fontSize: "20px" }}>Attack</p>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-danger" role="progressbar" style={{width:this.state.statsPor[1]+"%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[1]}</div>
-                                        </div>
-                                        <p style={{ fontSize: "20px" }}>Defense</p>
-                                        <div class="progress">
-                                            <div class="progress-bar  bg-warning" role="progressbar" style={{width:this.state.statsPor[2]+"%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[2]}</div>
-                                        </div>
-                                        <p style={{ fontSize: "20px" }}>Sprecial Attack</p>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" style={{width:this.state.statsPor[3]+"%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[3]}</div>
-                                        </div>
-                                        <p style={{ fontSize: "20px" }}>Special Defense</p>
-                                        <div class="progress">
-                                            <div class="progress-bar  bg-secondary" role="progressbar" style={{width:this.state.statsPor[4]+"%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[4]}</div>
-                                        </div>
-                                        <p style={{ fontSize: "20px" }}>Speed</p>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-dark" role="progressbar" style={{width:this.state.statsPor[5]+"%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[5]}</div>
-                                        </div>
+                                                ))
+                                            }
 
+                                        </div>
+                                        <div>
+                                            <h5 style={{ fontFamily: "Ketchum", fontSize: "40px" }}>Stats</h5>
+                                            <br />
+
+                                            <p style={{ fontSize: "20px" }}>HP</p>
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" style={{ width: this.state.statsPor[0] + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[0]}</div>
+                                            </div>
+                                            <p style={{ fontSize: "20px" }}>Attack</p>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-danger" role="progressbar" style={{ width: this.state.statsPor[1] + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[1]}</div>
+                                            </div>
+                                            <p style={{ fontSize: "20px" }}>Defense</p>
+                                            <div class="progress">
+                                                <div class="progress-bar  bg-warning" role="progressbar" style={{ width: this.state.statsPor[2] + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[2]}</div>
+                                            </div>
+                                            <p style={{ fontSize: "20px" }}>Sprecial Attack</p>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" role="progressbar" style={{ width: this.state.statsPor[3] + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[3]}</div>
+                                            </div>
+                                            <p style={{ fontSize: "20px" }}>Special Defense</p>
+                                            <div class="progress">
+                                                <div class="progress-bar  bg-secondary" role="progressbar" style={{ width: this.state.statsPor[4] + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[4]}</div>
+                                            </div>
+                                            <p style={{ fontSize: "20px" }}>Speed</p>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-dark" role="progressbar" style={{ width: this.state.statsPor[5] + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{this.state.stats[5]}</div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                            <div class="container" hidden={this.state.error ? false : true}>
+                                <h2 className="d-flex justify-content-center" style={{ fontFamily: "Ketchum", fontSize: "30px" }}>Error 404: Not Found</h2>
+                            </div>
+                        </div>
+                        <p className='d-flex justify-content-center'>
+                            <div class="spinner-border text-danger " role="status" hidden={this.state.pageLoading ? false : true}>
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </p>
                     </div>
                 </div>
             </div>
